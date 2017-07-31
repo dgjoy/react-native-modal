@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, Modal, DeviceEventEmitter, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, Modal, DeviceEventEmitter, TouchableWithoutFeedback,Platform,KeyboardAvoidingView } from 'react-native';
 import PropTypes from 'prop-types';
 import { View, initializeRegistryWithDefinitions } from 'react-native-animatable';
 import * as ANIMATION_DEFINITIONS from './animations';
@@ -148,6 +148,17 @@ export class ReactNativeModal extends Component {
       ...otherProps
     } = this.props;
     const { deviceWidth, deviceHeight } = this.state;
+    const mainContent =
+    (
+      <View
+        ref={ref => (this.contentRef = ref)}
+        style={[{ margin: deviceWidth * 0.05 }, styles.content, style]}
+        pointerEvents="box-none"
+        {...otherProps}
+      >
+        {children}
+      </View>
+    )
     return (
       <Modal
         transparent={true}
@@ -169,14 +180,13 @@ export class ReactNativeModal extends Component {
             ]}
           />
         </TouchableWithoutFeedback>
-        <View
-          ref={ref => (this.contentRef = ref)}
-          style={[{ margin: deviceWidth * 0.05 }, styles.content, style]}
-          pointerEvents="box-none"
-          {...otherProps}
-        >
-          {children}
-        </View>
+        {
+          Platform.OS==='ios'?
+          <KeyboardAvoidingView behavior="padding">
+            {mainContent}
+          </KeyboardAvoidingView>:
+          mainContent
+        }
       </Modal>
     );
   }
