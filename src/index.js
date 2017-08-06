@@ -182,7 +182,7 @@ export class ReactNativeModal extends Component {
         </TouchableWithoutFeedback>
         {
           Platform.OS==='ios'?
-          <KeyboardAvoidingView behavior="padding">
+          <KeyboardAvoidingView behavior="padding" style={styles.content}>
             {mainContent}
           </KeyboardAvoidingView>:
           mainContent
